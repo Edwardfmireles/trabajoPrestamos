@@ -121,6 +121,9 @@ namespace Prestamos
 
             DateTime fechaAPagar = Convert.ToDateTime(fecha);
           
+
+            MessageBox.Show(this.periodoPago.ToString());
+
             if (estado != "PAGADO")
             {
                 if (fechaActual < fechaAPagar)
@@ -132,12 +135,17 @@ namespace Prestamos
                     }
                     else if (this.cantidad == cuota)
                     {
+                        MessageBox.Show("cantidad " + cantidad + " cuotas " + cuota);
 
                         conn.actualizar("intervalos", "estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fecha + "'");
                             
                         dataGridView1.DataSource = null;
                         
+                        MessageBox.Show(Conexion.mensaje);
+                        
                         cargarDatos();
+                            
+                        MessageBox.Show(Conexion.mensaje);
                     }
                     else
                     {
@@ -164,6 +172,8 @@ namespace Prestamos
                         conn.actualizar("intervalos", "estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fechaAPagar.ToString("yyyy-MM-dd") + "'");
                         conn.actualizar("intervalos", "intervaloPago", "CONVERT(int," + (cuota + _mora) + ")", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fechaAPagar.AddDays(this.periodoPago).ToString("yyyy-MM-dd") + "'");
                     }
+
+                    MessageBox.Show(Conexion.mensaje);
                     
                     dataGridView1.DataSource = null;
 

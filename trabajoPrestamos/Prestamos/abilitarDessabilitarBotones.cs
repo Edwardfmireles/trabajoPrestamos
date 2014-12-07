@@ -74,7 +74,6 @@ namespace Prestamos
             this.f.acdireccion.Text = "";
         }
 
-        // METODO PARA LIMPIAR LOS CAMPOS DEL CONTENEDOR NUEVO CLIENTE
         public void limpiarNuevoCliente()
         {
             this.f.rcnombre.Text = "";
@@ -83,7 +82,6 @@ namespace Prestamos
             this.f.rccedula.Text = "";
         }
 
-        // METODO PARA LIMPIAR EL CAMPO BUSCAR CLIENTE DEL CONTENEDOR ABONO
         public void limpiarAbono()
         {
             this.f.abuscarcliente.Text = "";

@@ -50,7 +50,6 @@ namespace Prestamos
         // METODO QUE GENERA UNA NUEVA FACTURA Y LA FORMATEA
         private void generarNuevaFactura()
         {
-
             nffecha.Text = Convert.ToString(dFechaInicial.Day + "/" + dFechaInicial.Month + "/" + dFechaInicial.Year);
             nffechainicial.Text = nffecha.Text;
 
@@ -103,7 +102,6 @@ namespace Prestamos
             groupnuevafactura.Visible = false;
             llenarDataGridView._llenarDataGridView(dataGridEliminarCliente, "select * from clientes");
             this.ClientSize = new System.Drawing.Size(583, dropeliminarcliente.Height + 20);
-
         }
 
         // METODO QUE OCURRE CUANDO SE PRESIONA LA OPCION CLIENTES - ACTUALIZAR CLIENTE
@@ -181,15 +179,13 @@ namespace Prestamos
         private void nfmonto_TextChanged(object sender, EventArgs e)
         {
             TextBox sen = (TextBox)sender;
-
-
+            
             if (!int.TryParse(sen.Text.ToString().Trim(), out this.meses) && this.meses < 1)
             {
                 sen.Text = "";
                 nfcuotas.Text = "";
 
             }
-
 
             nfCalcularMonto.Visible = true;
             nfMontoTotal.Text = "";
@@ -239,12 +235,10 @@ namespace Prestamos
             }
             else
             {
-
                 nfcuotas.Text = "";
                 generarfechas(this.meses);
 
             }
-
         }
 
         // METODO QUE SE UTILIZA PARA QUE EL USUARIO SOLO INSERTE NUMEROS EN EL INTERES DE UNA FACTURA
@@ -257,7 +251,6 @@ namespace Prestamos
                 sen.Text = "";
 
             }
-
 
             nfcuotas.Text = "";
             nfCalcularMonto.Visible = true;
@@ -297,10 +290,7 @@ namespace Prestamos
                 generarCuotasYTotal();
 
                 Conexion conn = new Conexion();
-                string cadena = "intervalos(idCliente,intervaloFecha,intervaloPago)" +
-                                    "( CONVERT(int," + clienteId + "), CONVERT(DATETIME," + this.fechasArray[fechas.Count - 1].ToString("yyyy-MM-dd") + "), CONVERT(int," + this.cuotas + ") )";
 
-                // MessageBox.Show(cadena);
                 if (conn.insertar("prestamos(monto,interes,cuotas,periodoPago,moraPrestamo,fechaInicial,fechaFinal)",
                                             "( CONVERT(int," + nfmonto.Text.Trim() +
                                             "), CONVERT(int," + nfinteres.Text.Trim() + "), " +
@@ -309,8 +299,6 @@ namespace Prestamos
                                             "', CONVERT(int," + this.mora + "), SYSDATETIME(),'" +
                                             this.fechasArray[fechas.Count - 1].ToString("yyyy-MM-dd") + "' )", "") == true)
                 {
-
-
                     if (conn.insertar("facturacion (idCliente, idPrestamo)",
                                    "(CONVERT(int," + clienteId + "), CONVERT(int," + facturaNumero + "))", ""))
                     {
@@ -321,22 +309,24 @@ namespace Prestamos
                             {
                                 MessageBox.Show("No se agrego el intervalo " + i + " fecha " + fechas[i].ToString("yyyy-MM-dd"));
                             }
+                            else
+                            {
+                                MessageBox.Show(Conexion.mensaje);
+                            }
                         }
-
-
                     }
                     else
                     {
                         MessageBox.Show("No se hizo la Factura");
                     }
                 }
-				
-
-
+                else
+                {
+                    MessageBox.Show(Conexion.mensaje);
+                }
                 MessageBox.Show("Factura Realizada");
                 this.adb.deshabilitarLimpiarnuevaFactura();
                 generarNuevaFactura();
-
             }
         }
 
@@ -394,47 +384,34 @@ namespace Prestamos
                 MessageBox.Show("Debe de ingresar un monto");
                 nfmonto.Focus();
             }
-
             return false;
-
         }
 
         // METODO PARA GENERAR LAS FECHAS QUE EL USUARIO ELIGIO EN EL METODO DE PAGO DE UNA FACTURA
         private void generarfechas(int parse)
         {
             this.fechasArray = new DateTime[parse];
-
-
+            
             int j = 0;
-
-
+            
             fechas.Clear();
 
             if (this.quinsenalMensualAnual == 15)
             {
                 this.calculoquincenasMensualidadAnual = 15 * parse;
-
-
+                
                 for (int i = 1; i <= parse; i++)
                 {
                     fechas.Add(DateTime.Today.AddDays(i * 15));
                 }
-
-
+                
                 foreach (var item in fechas)
                 {
-                    //MessageBox.Show(Convert.ToString(item.Day + "/" + item.Month + "/" + item.Year));
-
-
                     this.fechasArray[j] = Convert.ToDateTime(item);
                     j++;
                 }
-
-
-                nffechafinal.Text = Convert.ToString(this.fechasArray[fechas.Count - 1].Day + "/" + this.fechasArray[fechas.Count - 1].Month + "/" + this.fechasArray[fechas.Count - 1].Year);
-
-
-
+                
+                nffechafinal.Text = Convert.ToString(this.fechasArray[fechas.Count - 1].Day + "/" + this.fechasArray[fechas.Count - 1].Month + "/" + this.fechasArray[fechas.Count - 1].Year);                
             }
             else if (this.quinsenalMensualAnual == 30)
             {
@@ -447,16 +424,11 @@ namespace Prestamos
 
                 foreach (var item in fechas)
                 {
-                    //MessageBox.Show(Convert.ToString(item.Day + "/" + item.Month + "/" + item.Year));
-
-
                     this.fechasArray[j] = Convert.ToDateTime(item);
                     j++;
                 }
 
-
                 nffechafinal.Text = Convert.ToString(this.fechasArray[fechas.Count - 1].Day + "/" + this.fechasArray[fechas.Count - 1].Month + "/" + this.fechasArray[fechas.Count - 1].Year);
-
             }
             else if (this.quinsenalMensualAnual == 365)
             {
@@ -472,8 +444,6 @@ namespace Prestamos
                     this.fechasArray[j] = Convert.ToDateTime(item);
                     j++;
                 }
-
-
                 nffechafinal.Text = Convert.ToString(this.fechasArray[fechas.Count - 1].Day + "/" + this.fechasArray[fechas.Count - 1].Month + "/" + this.fechasArray[fechas.Count - 1].Year);
             }
         }
@@ -481,20 +451,17 @@ namespace Prestamos
         // METODO QUE GENERA LAS CUOTAS Y EL MONTO TOTAL A PAGAR DE UN PRESTAMO
         public void generarCuotasYTotal()
         {
-
             float monto = float.Parse(nfmonto.Text);
             float interes = (float.Parse(nfinteres.Text) / 100) * monto;
             float montoT = monto + interes;
             float cuota = montoT / float.Parse(nfmeses.Text);
-            this.mora = Convert.ToInt32(Math.Floor(float.Parse(nfmora.Text.Trim()) / 100) * interes);
-            
+            this.mora = Convert.ToInt32(Math.Floor(float.Parse(nfmora.Text.Trim()) / 100) * interes);         
 
             this.cuotas = Convert.ToInt32(Math.Floor(cuota));
 
             nfcuotas.Text = Convert.ToString((Math.Floor(cuota))) + ".00";
 
             nfMontoTotal.Text = Convert.ToString((Math.Floor(montoT))) + ".00";
-
         }
 
         //METODO PARA SELECCIONAR UNA LINEA EN EL DATAGRIDVIEW ELIMINAR CLIENTE
@@ -506,13 +473,10 @@ namespace Prestamos
         // METODO QUE OCURRE CUANDO SE LE DA DOBLE CLICK AL DATAGRIDVIEW DE ELIMINAR CLIENTE
         private void dataGridEliminarCliente_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-
             string nombre = dataGridEliminarCliente.Rows[e.RowIndex].Cells[1].Value.ToString();
             int idCliente = Convert.ToInt16(dataGridEliminarCliente.Rows[e.RowIndex].Cells[0].Value.ToString());
 
-
             metodoEliminarClienteSeleccionado(nombre, idCliente);
-
         }
 
         // METODO QUE ELIMINA CLIENTES
@@ -526,29 +490,24 @@ namespace Prestamos
 
                     Conexion.ConectarBD.Open();
 
+                    SqlCommand facturacion = new SqlCommand("delete from facturacion where idCliente=" + idCliente, Conexion.ConectarBD);
+
+                    facturacion.ExecuteNonQuery();
+                    
                     SqlCommand intervalos = new SqlCommand("delete from intervalos where idCliente=" + idCliente, Conexion.ConectarBD);
 
                     intervalos.ExecuteNonQuery();
-					
-					
-					SqlCommand facturacion = new SqlCommand("delete from facturacion where idCliente=" + idCliente, Conexion.ConectarBD);
-					
-					facturacion.ExecuteNonQuery();
 
                     SqlCommand clientes = new SqlCommand("delete from clientes where idCliente=" + idCliente, Conexion.ConectarBD);
 
                     clientes.ExecuteNonQuery();
-
-
+                    
                     dataGridEliminarCliente.Rows.RemoveAt(dataGridEliminarCliente.CurrentRow.Index);
-
                 }
                 catch (SqlException sqle)
                 {
                     MessageBox.Show(sqle.ToString());
                 }
-
-
                 Conexion.ConectarBD.Close();
             }
         }
@@ -560,7 +519,6 @@ namespace Prestamos
             dropeliminarcliente.Visible = false;
 
             this.ClientSize = new System.Drawing.Size(751, 261);
-
         }
 
         // METODO DE BOTON ELIMINAR DEL CONTENEDOR ELIMINAR CLIENTE
@@ -568,8 +526,7 @@ namespace Prestamos
         {
             string nombre = dataGridEliminarCliente.Rows[dataGridEliminarCliente.CurrentRow.Index].Cells[1].Value.ToString();
             int idCliente = Convert.ToInt16(dataGridEliminarCliente.Rows[dataGridEliminarCliente.CurrentRow.Index].Cells[0].Value.ToString());
-
-
+            
             metodoEliminarClienteSeleccionado(nombre, idCliente);
         }
 
@@ -628,7 +585,6 @@ namespace Prestamos
         // METODO PARA ACTUALIZAR EL CLIENTE Y ACTUALIZARLO EN LA BASE DE DATOS
         private void acactualizar_Click(object sender, EventArgs e)
         {
-
             bool dir = false;
             bool tel = false;
 
@@ -636,20 +592,15 @@ namespace Prestamos
 
             try
             {
-
                 if (acdireccion.Text.ToLower().Trim() != acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[3].Value.ToString().ToLower().Trim())
                 {
-
                     dir = con.actualizar("clientes", "direccion", acdireccion.Text.Trim(), "clientes.idCliente=CONVERT(int," + acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[0].Value.ToString() + ")");
+                    MessageBox.Show(Conexion.mensaje);
                 }
-
                 if (actelefono.Text.ToLower().Trim() != acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[4].Value.ToString().ToLower().Trim())
                 {
-
                     tel = con.actualizar("clientes", "telefono", actelefono.Text.Trim(), "clientes.idCliente=CONVERT(int," + acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[0].Value.ToString() + ")");
                 }
-
-
             }
             catch (SqlException)
             {
@@ -661,7 +612,6 @@ namespace Prestamos
                 MessageBox.Show("Datos Actualizados");
 
                 adb.limpiarActualizarCliente();
-
             }
 
         }
@@ -809,9 +759,7 @@ namespace Prestamos
                 Abonar ab = new Abonar(idC, idP, nombre);
 
                 ab.ShowDialog();
-            }
-            
-
+            }            
         }
 
         // MEDOTO QUE OCURRE CUANDO SE LE DA DOBLE CLICK AL DATAGRIDVIEW DEL CONTENEDOR ABONO PARA VER 
@@ -829,6 +777,5 @@ namespace Prestamos
                 ab.ShowDialog();
             }
         }
-
     }
 }
