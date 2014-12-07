@@ -16,7 +16,7 @@ namespace Prestamos
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new programaPrincipal());
+            Application.Run(new login());
         }
     }
 }

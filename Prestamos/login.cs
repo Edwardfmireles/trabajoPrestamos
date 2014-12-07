@@ -7,16 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace Prestamos
 {
     public partial class login : Form
     {
+        // INICIA TODOS LOS COMPONENTES DEL FORMULARIO LOGIN
         public login()
         {
             InitializeComponent();
         }
 
+        // EVENTO KEYPRESS - HACE QUE CUANDO SE PRESIONE LA TECLA ENTER LO ENVIE AL SIGUIENTE TEXTBOX
         private void busuario_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == Convert.ToChar(Keys.Enter))
@@ -25,17 +28,39 @@ namespace Prestamos
             }
         }
 
+        // EVENTO KEYPRESS - HACE QUE CUANDO SE PRESIONE LA TECLA ENTER CONSULTE LA BASE DE DATOS
+        // PARA COMPROBAR SI EXISTE EL NOMBRE Y CONTRASEÑA DEL USUARIO
         private void bcontrasena_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == Convert.ToChar(Keys.Enter))
             {
-                if (busuario.Text.Trim().Length > 3)
+                if (busuario.Text.Trim().Length > 2)
                 {
-                    if (bcontrasena.Text.Trim().Length > 3)
+                    if (bcontrasena.Text.Trim().Length > 2)
                     {
-                        programaPrincipal pro = new programaPrincipal();
-                        pro.Show();
-                        this.Hide();
+
+                        Conexion conn = new Conexion();
+
+                        Conexion.ConectarBD.Open();
+                        try 
+	                    {	        
+		                    SqlCommand com = new SqlCommand("select count(*) from empleados where nombre='" + busuario.Text.Trim() + "' and contrasena='" + bcontrasena.Text.Trim() + "'", Conexion.ConectarBD);
+
+                            if(Convert.ToInt32(com.ExecuteScalar()) == 1) {
+                                programaPrincipal pro = new programaPrincipal();
+                                pro.Show();
+                                this.Hide();
+                            }
+                            
+	                    }
+	                    catch (Exception)
+	                    {
+
+	                    }
+                        finally
+                        {
+                            Conexion.ConectarBD.Close();
+                        }
                     }
                     else
                     {

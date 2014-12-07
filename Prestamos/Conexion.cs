@@ -22,6 +22,7 @@ namespace Prestamos
 
         public static SqlConnection ConectarBD;
 
+        // CONSTRUCTOR DE LA CLASE CONEXION EL CUAL INICIA UNA CONEXION SQL
         public Conexion()
         {
 
@@ -38,9 +39,9 @@ namespace Prestamos
 
             Conexion.ConectarBD = new SqlConnection(line);
 
-            
         }
 
+        // METODO PARA OBTENER EL ULTIMO ID DE UNA TABLA
         public int obtenerUltimoId(string select, string from, string where)
         {
 
@@ -62,18 +63,12 @@ namespace Prestamos
                Conexion.ConectarBD.Open();
                this.comsql = new SqlCommand(this.query, Conexion.ConectarBD);
                
-               
-
                this.dataReader = this.comsql.ExecuteReader();
-
 
                while (this.dataReader.Read())
                {
                    no++;
                }
-               //no = this.dataReader.GetInt32(this.dataReader.GetOrdinal("ID_PRODUCTO"));
-
-            //   conexionSQL.mensaje = no.ToString();
            }
           catch(SqlException s)
            {
@@ -88,6 +83,7 @@ namespace Prestamos
 
         }
 
+        // METODO PARA INSERTAR DATOS EN LA BASE DE DATOS
         public bool insertar(string into, string values, string where)
         {
 
@@ -106,10 +102,8 @@ namespace Prestamos
                 
                 try
                 {
-
                     Conexion.ConectarBD.Open();
                     this.comsql = new SqlCommand(this.query, Conexion.ConectarBD);
-                    
                     
                     this.comsql.ExecuteNonQuery();
 
@@ -128,12 +122,9 @@ namespace Prestamos
 
                 }
 
-                
         }
 
-
-
-
+        // METODO PARA ACTUALIZAR UNA COLUMNA EN LA BASE DE DATOS
         public bool actualizar(string tabla, string columna, string valor, string where)
         {
             if (tabla != String.Empty && tabla.Length > 4 && columna != String.Empty && columna.Length > 4 && valor != String.Empty && valor.Length > 0 && where != String.Empty && where.Length > 4)
@@ -150,16 +141,11 @@ namespace Prestamos
 
                     this.comsql.ExecuteNonQuery();
                     return true;
-                            //rows number of record got updated
-                            
                     
                 }
-                catch (SqlException ex)
+                catch (SqlException)
                 {
 
-                    return false;
-                    //Log exception
-                    //Display Error message
                 }
                 finally
                 {
@@ -170,7 +156,6 @@ namespace Prestamos
 
             return false;
         }
-
-
+        
     }
 }

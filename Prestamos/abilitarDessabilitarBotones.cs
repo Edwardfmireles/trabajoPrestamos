@@ -11,6 +11,8 @@ namespace Prestamos
     {
         public programaPrincipal f;
 
+        // CONTRUCTOR DE LA CLASE abilitarDessabilitarBotones EL CUAL RECIBE COMO PARAMETO
+        // LA CLASE programaPrincipal PARA ACCEDER A TODOS SUS COMPONENTES
         public abilitarDessabilitarBotones(programaPrincipal formu)
         {
             this.f = formu;
@@ -24,6 +26,7 @@ namespace Prestamos
             this.f.ClientSize = new System.Drawing.Size(751, 261);
         }
 
+        // METODO PARA DESHABILITAR Y LIMPIAR LOS CAMPOS DEL CONTENEDOR NUEVA FACTURA
         public void deshabilitarLimpiarnuevaFactura() 
         {
           // NUEVA FACTURA
@@ -53,11 +56,13 @@ namespace Prestamos
 
         }
 
+        // METODO PARA LIMPIAR EL CAMPO DE BUSQUEDA DEL CLIENTE DEL CONTENDEDOR ELIMINAR CLIENTE
         public void limpiarEliminarCliente()
         {
             this.f.ecbuscarcliente.Text = "";
         }
 
+        // METODO PARA LIMPIAR LOS CAMPOS DEL CONTENEDOR ACTUALIZAR CLIENTE
         public void limpiarActualizarCliente()
         {
             this.f.acactualizar.Enabled = false;

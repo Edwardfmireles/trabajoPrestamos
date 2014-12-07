@@ -1073,11 +1073,11 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(735, 418);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.dropregistrarClientes);
-            this.Controls.Add(this.groupnuevafactura);
             this.Controls.Add(this.dropeliminarcliente);
             this.Controls.Add(this.groupactualizarcliente);
             this.Controls.Add(this.groupabono);
+            this.Controls.Add(this.dropregistrarClientes);
+            this.Controls.Add(this.groupnuevafactura);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "programaPrincipal";

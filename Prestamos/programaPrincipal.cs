@@ -26,6 +26,8 @@ namespace Prestamos
         private string periodoPago;
         public int clienteId;
         public int mora;
+
+        // CARGA TODA LA INTERFAZ DEL PROGRAMA
         public programaPrincipal()
         {
             InitializeComponent();
@@ -33,6 +35,8 @@ namespace Prestamos
             generarNuevaFactura();
         }
 
+        // METODO QUE OCURRE CUANDO SE CARGA EL FORMULARIO PRINCIPAL POR PRIMERA VEZ
+        // Y ESTABLECE QUE TODOS LOS CONTENEDORES (GROUPBOX) ESTEN OCULTOS
         private void programaPrincipal_Load(object sender, EventArgs e)
         {
 
@@ -43,6 +47,7 @@ namespace Prestamos
             groupnuevafactura.Visible = false;
         }
 
+        // METODO QUE GENERA UNA NUEVA FACTURA Y LA FORMATEA
         private void generarNuevaFactura()
         {
 
@@ -74,12 +79,9 @@ namespace Prestamos
                 this.nfnumerofactura.Text = this.facturaNumero.ToString();
             }
         }
+        
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        // METODO QUE OCURRE CUANDO SE PRESIONA LA OPCION CLIENTES - NUEVO CLIENTES
         private void nuevoClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dropregistrarClientes.Visible = true;
@@ -91,6 +93,7 @@ namespace Prestamos
             this.ClientSize = new System.Drawing.Size(636, dropregistrarClientes.Height + 20);
         }
 
+        // METODO QUE OCURRE CUANDO SE PRESIONA LA OPCION CLIENTES - ELIMINAR CLIENTE
         private void eliminarClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dropeliminarcliente.Visible = true;
@@ -103,6 +106,7 @@ namespace Prestamos
 
         }
 
+        // METODO QUE OCURRE CUANDO SE PRESIONA LA OPCION CLIENTES - ACTUALIZAR CLIENTE
         private void actualizarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dropregistrarClientes.Visible = false;
@@ -123,6 +127,7 @@ namespace Prestamos
             this.adb.limpiarActualizarCliente();
         }
 
+        // METODO QUE OCURRE CUANDO SE PRESIONA LA OPCION FACTUACION - NUEVA
         private void nuevaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dropregistrarClientes.Visible = false;
@@ -136,6 +141,7 @@ namespace Prestamos
 
         }
 
+        // METODO QUE OCURRE CUANDO SE PRESIONA LA OPCION FACTUACION - ABONO
         private void pagosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dropregistrarClientes.Visible = false;
@@ -149,12 +155,15 @@ namespace Prestamos
             llenarDataGridView._llenarDataGridView(dataGridabono, "SELECT clientes.idCliente 'id Cliente', prestamos.idPrestamo 'id Prestamo', nombre, cedula, monto, cuotas 'cuotas RD$', interes 'interes %', periodoPago 'Periodo de Pago', moraPrestamo 'mora RD$', fechaInicial 'fecha inicial', fechaFinal 'fecha final' FROM dbo.clientes,dbo.facturacion, prestamos where clientes.idCliente=facturacion.idCliente and facturacion.idPrestamo=prestamos.idPrestamo ORDER BY prestamos.fechaInicial ASC");
         }
 
+        // METODO PARA BUSCAR UN CLIENTE EN NUEVA FACTURA
         private void nfbuscarcliente_Click(object sender, EventArgs e)
         {
             buscarCliente bc = new buscarCliente(this);
             bc.ShowDialog();
         }
 
+        // METODO QUE OCURRE CUANDO SE LE INSERTA UN NOMBRE AL TEXTBOX NOMBRE EN LA NUEVA FACTURA
+        // EL CUAL SE UTILIZA PARA HABILITAR TODOS LOS CAMPOS DE LA FACTURA
         private void nfnombre_TextChanged(object sender, EventArgs e)
         {
             if (nfnombre.Text.Length > 0)
@@ -168,6 +177,7 @@ namespace Prestamos
             }
         }
 
+        // METODO QUE SE UTILIZA PARA QUE EL USUARIO SOLO INSERTE NUMEROS EN EL MONTO DE UNA FACTURA
         private void nfmonto_TextChanged(object sender, EventArgs e)
         {
             TextBox sen = (TextBox)sender;
@@ -186,6 +196,8 @@ namespace Prestamos
             nfcuotas.Text = "";
         }
 
+        // SIRVE PARA MODIFICAR EL METODO DE PAGO (ANUAL, QUINCENAL, MENSUAL)
+        // SUCEDE CUANDO EL USUARIO ELIGE UN MODO DE PAGO
         private void nfperiodopago_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (nfperiodopago.SelectedIndex)
@@ -214,6 +226,7 @@ namespace Prestamos
             }
         }
 
+        // METODO QUE SE UTILIZA PARA QUE EL USUARIO SOLO INSERTE NUMEROS EN MESES DE UNA FACTURA
         private void nfmeses_TextChanged(object sender, EventArgs e)
         {
             TextBox sen = (TextBox)sender;
@@ -232,9 +245,9 @@ namespace Prestamos
 
             }
 
-
         }
 
+        // METODO QUE SE UTILIZA PARA QUE EL USUARIO SOLO INSERTE NUMEROS EN EL INTERES DE UNA FACTURA
         private void nfinteres_TextChanged(object sender, EventArgs e)
         {
             TextBox sen = (TextBox)sender;
@@ -251,6 +264,7 @@ namespace Prestamos
             nfMontoTotal.Text = "";
         }
 
+        // METODO QUE SE UTILIZA PARA QUE EL USUARIO SOLO INSERTE NUMEROS EN MORA DE UNA FACTURA
         private void nfmora_TextChanged(object sender, EventArgs e)
         {
             TextBox sen = (TextBox)sender;
@@ -264,7 +278,7 @@ namespace Prestamos
             nfMontoTotal.Text = "";
         }
 
-
+        // SIRVE PARA CALCULAR EL EL MONTO TOTAL, LA FECHA FINAL Y LAS CUOTAS DE UNA FACTURA
         private void nfCalcularMonto_Click(object sender, EventArgs e)
         {
             if (validarCamposVacios() == true)
@@ -275,7 +289,7 @@ namespace Prestamos
             }
         }
 
-
+        // METODO PARA INSERTAR UNA FACTURA A LA BASE DE DATOS Y LUEGO LIMPIAR LOS CAMPOS
         private void nffacturar_Click(object sender, EventArgs e)
         {
             if (validarCamposVacios() == true)
@@ -333,6 +347,7 @@ namespace Prestamos
             }
         }
 
+        // SIRVE PARA CANCELAR LA FACTURA Y OCULTAR EL CONTENEDOR (GROUPBOX)
         private void nfcancelar_Click(object sender, EventArgs e)
         {
             groupnuevafactura.Visible = false;
@@ -342,6 +357,7 @@ namespace Prestamos
             this.ClientSize = new System.Drawing.Size(751, 261);
         }
 
+        // METODO PARA VALIDAR LOS CAMPOS DE UNA FACTURA
         private bool validarCamposVacios()
         {
             if (nfmonto.Text.Length > 0)
@@ -390,6 +406,7 @@ namespace Prestamos
 
         }
 
+        // METODO PARA GENERAR LAS FECHAS QUE EL USUARIO ELIGIO EN EL METODO DE PAGO DE UNA FACTURA
         private void generarfechas(int parse)
         {
             this.fechasArray = new DateTime[parse];
@@ -468,6 +485,7 @@ namespace Prestamos
             }
         }
 
+        // METODO QUE GENERA LAS CUOTAS Y EL MONTO TOTAL A PAGAR DE UN PRESTAMO
         public void generarCuotasYTotal()
         {
 
@@ -486,11 +504,13 @@ namespace Prestamos
 
         }
 
+        //METODO PARA SELECCIONAR UNA LINEA EN EL DATAGRIDVIEW ELIMINAR CLIENTE
         private void ecbuscarcliente_TextChanged(object sender, EventArgs e)
         {
             seleccionarLineaDataGridView(sender, dataGridEliminarCliente);
         }
 
+        // METODO QUE OCURRE CUANDO SE LE DA DOBLE CLICK AL DATAGRIDVIEW DE ELIMINAR CLIENTE
         private void dataGridEliminarCliente_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -502,6 +522,7 @@ namespace Prestamos
 
         }
 
+        // METODO QUE ELIMINA CLIENTES
         private void metodoEliminarClienteSeleccionado(string nombre, int idCliente)
         {
             if (MessageBox.Show("Desea eliminar el usuario " + nombre, "Eliminar Usuario", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
@@ -534,6 +555,7 @@ namespace Prestamos
             }
         }
 
+        // METODO CANCELAR DE ELIMINAR CLIENTE QUE OCULTA EL CONTENEDOR
         private void eccancelar_Click(object sender, EventArgs e)
         {
             adb.limpiarEliminarCliente();
@@ -543,6 +565,7 @@ namespace Prestamos
 
         }
 
+        // METODO DE BOTON ELIMINAR DEL CONTENEDOR ELIMINAR CLIENTE
         private void eceliminar_Click(object sender, EventArgs e)
         {
             string nombre = dataGridEliminarCliente.Rows[dataGridEliminarCliente.CurrentRow.Index].Cells[1].Value.ToString();
@@ -552,16 +575,19 @@ namespace Prestamos
             metodoEliminarClienteSeleccionado(nombre, idCliente);
         }
 
+        // METODO PARA SELECCIONAR UN CLIENTE DEL CONTENEDOR ACTUALIZAR CLIENTE
         private void acbuscarcliente_TextChanged(object sender, EventArgs e)
         {
             seleccionarLineaDataGridView(sender, acDataGridView);
         }
 
+        // BOTON PARA EDITAR UN CLIENTE DEL CONTENEDOR ACTUALIZAR CLIENTE
         private void aceditar_Click(object sender, EventArgs e)
         {
             llenarCamposActualizarCliente();
         }
 
+        // METODO PARA SELECCIONAR UNA LINEA DEL DATAGRIDVIEW QUE SE PASE COMO SEGUNDO PARAMETRO
         public void seleccionarLineaDataGridView(object sender, DataGridView datagrid)
         {
             TextBox sen = (TextBox)sender;
@@ -581,11 +607,14 @@ namespace Prestamos
             }
         }
 
+        // METODO QUE LLENA LOS CAMPOS AUTOMATICAMENTE PARA EDITAR UN CLIENTE CADA VEZ QUE SE 
+        // SELECCIONA UNA LINEA NUEVA DEL DATAGRIDVIEW ACTUALIZAR CLIENTE
         private void acDataGridView_SelectionChanged(object sender, EventArgs e)
         {
             llenarCamposActualizarCliente();
         }
 
+        // METODO QUE LLENA LOS TEXTBOXES DEL CONTENEDOR ACTUALIZAR CLIENTE
         private void llenarCamposActualizarCliente()
         {
             if (acDataGridView.Rows.Count > 0)
@@ -598,6 +627,7 @@ namespace Prestamos
 
         }
 
+        // METODO PARA ACTUALIZAR EL CLIENTE Y ACTUALIZARLO EN LA BASE DE DATOS
         private void acactualizar_Click(object sender, EventArgs e)
         {
 
@@ -608,7 +638,6 @@ namespace Prestamos
 
             try
             {
-
 
                 if (acdireccion.Text.ToLower().Trim() != acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[3].Value.ToString().ToLower().Trim())
                 {
@@ -630,12 +659,9 @@ namespace Prestamos
                 MessageBox.Show("Error al actualizar Datos");
             }
 
-
-
             if (dir == true || tel == true)
             {
                 MessageBox.Show("Datos Actualizados");
-
 
                 adb.limpiarActualizarCliente();
 
@@ -643,6 +669,7 @@ namespace Prestamos
 
         }
 
+        // MEDOTO PARA ACTIVAR O DESACTIVAR EL BOTON DE ACTUALIZAR CLIENTTE SI NO HAY NADA ESCRITO EN EL TEXTBOX NOMBRE
         private void acnombre_TextChanged(object sender, EventArgs e)
         {
             if (acnombre.Text.Length > 0)
@@ -655,6 +682,7 @@ namespace Prestamos
             }
         }
 
+        // BOTON CANCELAR DEL CONTENEDOR ACTUALIZAR CLIENTE
         private void accancelar_Click(object sender, EventArgs e)
         {
             groupactualizarcliente.Visible = false;
@@ -663,6 +691,7 @@ namespace Prestamos
             this.ClientSize = new System.Drawing.Size(751, 261);
         }
 
+        // METODO PARA DESACTIVAR EL BOTON DE FACTURAR CUANDO EL BOTON CALCULAR MONTO ESTE VISIBLE
         private void nfCalcularMonto_VisibleChanged(object sender, EventArgs e)
         {
             if (nfCalcularMonto.Visible == true)
@@ -671,6 +700,7 @@ namespace Prestamos
             }
         }
 
+        // METODO PARA QUE SOLO SE PUEDAN ESCRIBIR NUMEROS Y GUION EN EL TEXTBOX CEDULA DEL CONTENEDOR NUEVO CLIENTE
         private void rccedula_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((e.KeyChar >= 48 && e.KeyChar <= 57) || e.KeyChar == 13 || e.KeyChar == 8 || e.KeyChar.ToString() == "-")
@@ -684,6 +714,7 @@ namespace Prestamos
             }
         }
 
+        // METODO PARA QUE SOLO SE PUEDAN ESCRIBIR NUMEROS Y GUION EN EL TEXTBOX TELEFONO DEL CONTENEDOR NUEVO CLIENTE
         private void rctelefono_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((e.KeyChar >= 48 && e.KeyChar <= 57) || e.KeyChar == 13 || e.KeyChar == 8 || e.KeyChar.ToString() == "-")
@@ -697,6 +728,8 @@ namespace Prestamos
             }
         }
 
+        // METODO PARA VALIDAR LOS CAMPOS DEL CONTENEDOR NUEVO CLIENTE HE INSERTARLOS EN LA BASE DE DATOS 
+        // PARA GUARDAR UN NUEVO CLIENTE
         private void rcaceptar_Click(object sender, EventArgs e)
         {
             MessageBox.Show(rctelefono.Text);
@@ -745,17 +778,20 @@ namespace Prestamos
             }
         }
 
+        // BOTON CANCELAR DEL CONTENEDOR NUEVO CLIENTE
         private void rccancelar_Click(object sender, EventArgs e)
         {
             dropregistrarClientes.Visible = false;
             this.adb.limpiarNuevoCliente();
         }
 
+        // METODO PARA BUSCAR UN CLIENTE EN ABONO
         private void abuscarcliente_TextChanged(object sender, EventArgs e)
         {
             seleccionarLineaDataGridView(sender, dataGridabono);
         }
 
+        // BOTON CANCELAR DEL CONTENEDOR ABONO
         private void acancelar_Click(object sender, EventArgs e)
         {
             groupabono.Visible = false;
@@ -764,6 +800,7 @@ namespace Prestamos
             this.ClientSize = new System.Drawing.Size(751, 261);
         }
 
+        // BOTON VER REGISTRO PARA VER LAS FECHAS EN QUE TIENE QUE PAGAR Y LAS CUOTAS DE CADA UNO CON SU ESTADO DE "NO PAGO" O "PAGADO"
         private void averregistro_Click(object sender, EventArgs e)
         {
             if (dataGridabono.Rows.Count > 0)
@@ -780,6 +817,8 @@ namespace Prestamos
 
         }
 
+        // MEDOTO QUE OCURRE CUANDO SE LE DA DOBLE CLICK AL DATAGRIDVIEW DEL CONTENEDOR ABONO PARA VER 
+        // LAS FECHAS EN QUE TIENE QUE PAGAR Y LAS CUOTAS DE CADA UNO CON SU ESTADO DE "NO PAGO" O "PAGADO"
         private void dataGridabono_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dataGridabono.Rows.Count > 0)
