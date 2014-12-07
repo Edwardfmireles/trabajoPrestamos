@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.averregistro = new System.Windows.Forms.Button();
+            this.pagar = new System.Windows.Forms.Button();
             this.label = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -46,16 +46,18 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(321, 220);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.TabIndex = 2;
             // 
-            // averregistro
+            // pagar
             // 
-            this.averregistro.Location = new System.Drawing.Point(237, 248);
-            this.averregistro.Name = "averregistro";
-            this.averregistro.Size = new System.Drawing.Size(102, 20);
-            this.averregistro.TabIndex = 52;
-            this.averregistro.Text = "Pagar";
-            this.averregistro.UseVisualStyleBackColor = true;
+            this.pagar.Enabled = false;
+            this.pagar.Location = new System.Drawing.Point(237, 248);
+            this.pagar.Name = "pagar";
+            this.pagar.Size = new System.Drawing.Size(102, 20);
+            this.pagar.TabIndex = 1;
+            this.pagar.Text = "Pagar";
+            this.pagar.UseVisualStyleBackColor = true;
+            this.pagar.Click += new System.EventHandler(this.pagar_Click);
             // 
             // label
             // 
@@ -73,7 +75,8 @@
             this.textBox1.Location = new System.Drawing.Point(98, 248);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(133, 20);
-            this.textBox1.TabIndex = 53;
+            this.textBox1.TabIndex = 0;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // Abonar
             // 
@@ -82,7 +85,7 @@
             this.ClientSize = new System.Drawing.Size(367, 294);
             this.Controls.Add(this.label);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.averregistro);
+            this.Controls.Add(this.pagar);
             this.Controls.Add(this.dataGridView1);
             this.MaximizeBox = false;
             this.Name = "Abonar";
@@ -96,7 +99,7 @@
         #endregion
 
         public System.Windows.Forms.DataGridView dataGridView1;
-        public System.Windows.Forms.Button averregistro;
+        public System.Windows.Forms.Button pagar;
         private System.Windows.Forms.Label label;
         public System.Windows.Forms.TextBox textBox1;
 

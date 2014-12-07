@@ -21,11 +21,11 @@ namespace Prestamos
         private List<DateTime> fechas = new List<DateTime>();
         private DateTime[] fechasArray;
         private int cuotas;
-        private DateTime dFechaInicial = DateTime.Now;
+        private DateTime dFechaInicial = DateTime.Today;
         private int facturaNumero = 0;
         private string periodoPago;
         public int clienteId;
-
+        public int mora;
         public programaPrincipal()
         {
             InitializeComponent();
@@ -270,7 +270,7 @@ namespace Prestamos
             if (validarCamposVacios() == true)
             {
                 nfCalcularMonto.Visible = false;
-                genearCuotasYTotal();
+                generarCuotasYTotal();
                 nffacturar.Enabled = true;
             }
         }
@@ -280,6 +280,7 @@ namespace Prestamos
         {
             if (validarCamposVacios() == true)
             {
+                generarCuotasYTotal();
 
                 Conexion conn = new Conexion();
                 string cadena = "intervalos(idCliente,intervaloFecha,intervaloPago)" +
@@ -291,7 +292,7 @@ namespace Prestamos
                                             "), CONVERT(int," + nfinteres.Text.Trim() + "), " +
                                             "CONVERT(int," + this.cuotas + "), '" +
                                             this.periodoPago +
-                                            "', CONVERT(int," + nfmora.Text.Trim() + "), SYSDATETIME(),'" +
+                                            "', CONVERT(int," + this.mora + "), SYSDATETIME(),'" +
                                             this.fechasArray[fechas.Count - 1].ToString("yyyy-MM-dd") + "' )", "") == true)
                 {
 
@@ -467,13 +468,15 @@ namespace Prestamos
             }
         }
 
-        public void genearCuotasYTotal()
+        public void generarCuotasYTotal()
         {
 
             float monto = float.Parse(nfmonto.Text);
             float interes = (float.Parse(nfinteres.Text) / 100) * monto;
             float montoT = monto + interes;
             float cuota = montoT / float.Parse(nfmeses.Text);
+            this.mora = Convert.ToInt32(Math.Floor(float.Parse(nfmora.Text.Trim()) / 100) * interes);
+            
 
             this.cuotas = Convert.ToInt32(Math.Floor(cuota));
 
@@ -609,7 +612,7 @@ namespace Prestamos
 
                 if (acdireccion.Text.ToLower().Trim() != acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[3].Value.ToString().ToLower().Trim())
                 {
-                    //MessageBox.Show(acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[3].Value.ToString());
+
                     dir = con.actualizar("clientes", "direccion", acdireccion.Text.Trim(), "clientes.idCliente=CONVERT(int," + acDataGridView.Rows[acDataGridView.CurrentRow.Index].Cells[0].Value.ToString() + ")");
                     MessageBox.Show(Conexion.mensaje);
                 }
