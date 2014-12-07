@@ -73,6 +73,9 @@
       <DependentUpon>programaPrincipal.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Abonar.resx">
+      <DependentUpon>Abonar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="buscarCliente.resx">
       <DependentUpon>buscarCliente.cs</DependentUpon>
     </EmbeddedResource>

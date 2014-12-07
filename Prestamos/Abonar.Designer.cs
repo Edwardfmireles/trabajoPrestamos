@@ -28,11 +28,77 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.averregistro = new System.Windows.Forms.Button();
+            this.label = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(18, 12);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(321, 220);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // averregistro
+            // 
+            this.averregistro.Location = new System.Drawing.Point(237, 248);
+            this.averregistro.Name = "averregistro";
+            this.averregistro.Size = new System.Drawing.Size(102, 20);
+            this.averregistro.TabIndex = 52;
+            this.averregistro.Text = "Pagar";
+            this.averregistro.UseVisualStyleBackColor = true;
+            // 
+            // label
+            // 
+            this.label.AutoSize = true;
+            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label.Location = new System.Drawing.Point(18, 248);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(74, 18);
+            this.label.TabIndex = 54;
+            this.label.Text = "Cantidad";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(98, 248);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(133, 20);
+            this.textBox1.TabIndex = 53;
+            // 
+            // Abonar
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Abonar";
+            this.ClientSize = new System.Drawing.Size(367, 294);
+            this.Controls.Add(this.label);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.averregistro);
+            this.Controls.Add(this.dataGridView1);
+            this.MaximizeBox = false;
+            this.Name = "Abonar";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        public System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.Button averregistro;
+        private System.Windows.Forms.Label label;
+        public System.Windows.Forms.TextBox textBox1;
+
     }
 }

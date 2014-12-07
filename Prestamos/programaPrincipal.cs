@@ -301,8 +301,8 @@ namespace Prestamos
                     {
                         for (int i = 0; i < fechas.Count; i++)
                         {
-                            if (conn.insertar("intervalos(idCliente,intervaloFecha,intervaloPago)",
-                                    "( CONVERT(int," + clienteId + "), '" + fechasArray[i].ToString("yyyy-MM-dd") + "', CONVERT(int," + this.cuotas + ") )", "") == false)
+                            if (conn.insertar("intervalos(idCliente,idFactura,intervaloFecha,intervaloPago)",
+                                    "( CONVERT(int," + clienteId + "), CONVERT(int," + facturaNumero + "), '" + fechasArray[i].ToString("yyyy-MM-dd") + "', CONVERT(int," + this.cuotas + ") )", "") == false)
                             {
                                 MessageBox.Show("No se agrego el intervalo " + i + " fecha " + fechas[i].ToString("yyyy-MM-dd"));
                             }
@@ -759,6 +759,36 @@ namespace Prestamos
             adb.limpiarAbono();
 
             this.ClientSize = new System.Drawing.Size(751, 261);
+        }
+
+        private void averregistro_Click(object sender, EventArgs e)
+        {
+            if (dataGridabono.Rows.Count > 0)
+            {
+                int idC = Convert.ToInt32(dataGridabono.Rows[dataGridabono.CurrentRow.Index].Cells[0].Value.ToString());
+                int idP = Convert.ToInt32(dataGridabono.Rows[dataGridabono.CurrentRow.Index].Cells[1].Value.ToString());
+                string nombre = dataGridabono.Rows[dataGridabono.CurrentRow.Index].Cells[2].Value.ToString();
+
+                Abonar ab = new Abonar(idC, idP, nombre);
+
+                ab.ShowDialog();
+            }
+            
+
+        }
+
+        private void dataGridabono_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridabono.Rows.Count > 0)
+            {
+                int idC = Convert.ToInt32(dataGridabono.Rows[dataGridabono.CurrentRow.Index].Cells[0].Value.ToString());
+                int idP = Convert.ToInt32(dataGridabono.Rows[dataGridabono.CurrentRow.Index].Cells[1].Value.ToString());
+                string nombre = dataGridabono.Rows[dataGridabono.CurrentRow.Index].Cells[2].Value.ToString();
+
+                Abonar ab = new Abonar(idC, idP, nombre);
+
+                ab.ShowDialog();
+            }
         }
 
     }
