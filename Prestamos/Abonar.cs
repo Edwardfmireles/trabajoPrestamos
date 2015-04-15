@@ -19,6 +19,7 @@ namespace Prestamos
         private int mora;
         private int idCliente;
         private int idFactura;
+        private short periodoPago;
         Conexion conn = new Conexion();
         
         public Abonar(int _idCliente, int _idFactura, string nombre) 
@@ -35,12 +36,35 @@ namespace Prestamos
             {
                 Conexion.ConectarBD.Open();
 
-                SqlCommand comm = new SqlCommand("select prestamos.moraPrestamo from prestamos,facturacion where prestamos.idPrestamo=facturacion.idPrestamo and facturacion.idFactura=CONVERT(int," + idFactura + ")", Conexion.ConectarBD);
+                SqlCommand comm = new SqlCommand("select prestamos.moraPrestamo from prestamos,facturacion where prestamos.idPrestamo=facturacion.idPrestamo and facturacion.idFactura=CONVERT(int," + this.idFactura + ")", Conexion.ConectarBD);
 
                 SqlDataReader morasql = comm.ExecuteReader();
 
                 morasql.Read();
                 this.mora = morasql.GetInt32(0);
+                MessageBox.Show(this.mora.ToString());
+                Conexion.ConectarBD.Close();
+
+                Conexion.ConectarBD.Open();
+                SqlCommand com = new SqlCommand("select periodoPago from prestamos,facturacion where prestamos.idPrestamo=facturacion.idPrestamo and facturacion.idFactura=CONVERT(int," + this.idFactura + ")", Conexion.ConectarBD);
+
+                SqlDataReader _periodoPago = com.ExecuteReader();
+                
+                _periodoPago.Read();
+                switch (_periodoPago.GetString(0))
+                {
+                    case "QUINCENAL" :
+                        this.periodoPago = 15;
+                        break;
+                    case "MENSUAL" :
+                        this.periodoPago = 30;
+                        break;
+                    case "ANUAL" :
+                        this.periodoPago = 365;
+                        break;
+                }
+
+
                 Conexion.ConectarBD.Close();
 
 
@@ -63,7 +87,10 @@ namespace Prestamos
         {
             TextBox sen = (TextBox)sender;
 
-            if (int.TryParse(sen.Text.Trim(), out this.cantidad) && this.cantidad > 0)
+            int aa;
+
+
+            if (int.TryParse(sen.Text.Trim(), out aa) && aa > 0)
             {
                 pagar.Enabled = true;
             }
@@ -72,6 +99,7 @@ namespace Prestamos
                 sen.Text = "";
                 pagar.Enabled = false;
             }
+
         }
 
         private void pagar_Click(object sender, EventArgs e)
@@ -80,77 +108,170 @@ namespace Prestamos
             int cuota = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[1].Value.ToString());
             string estado = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Value.ToString();
 
+            this.cantidad = Convert.ToInt32(textBox1.Text.Trim());
+
             DateTime fechaActual = DateTime.Today;
 
             DateTime fechaAPagar = Convert.ToDateTime(fecha);
 
-            if (fechaActual < fechaAPagar )
-            {
+            //if (fechaActual < fechaAPagar )
+            //{
 
-                MessageBox.Show(this.mora.ToString());
-            }
-            else
-            {
-                MessageBox.Show("Fecha a pagar Mayor");
-            }
+            //    MessageBox.Show(this.mora.ToString());
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Fecha a pagar Mayor");
+            //}
 
            // MessageBox.Show(fechaActual.ToString() +" " + fechaAPagar.ToString());
-            
 
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+
+            //for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            //{
+            //    if (dataGridView1.Rows[i].Cells[2].Value.ToString() == "PAGADO")
+            //    {
+            //        textBox1.Text = "";
+            //        pagar.Enabled = false;
+            //    }
+            //}
+
+            MessageBox.Show(this.periodoPago.ToString());
+
+            if (estado != "PAGADO")
             {
-                if (dataGridView1.Rows[i].Cells[2].Value.ToString() == "NO PAGO")
+                if (fechaActual < fechaAPagar)
                 {
-                    if (fechaActual < fechaAPagar)
+
+
+                    if (this.cantidad < cuota)
                     {
-
-
-                        if (this.cantidad < cuota)
-                        {
-                            MessageBox.Show("Falta Dinero");
-                            textBox1.Focus();
-                            break;
-                        } 
-                        else if(this.cantidad == cuota ) 
-                        {
-                            try
-                            {
-                                Conexion.ConectarBD.Open();
-
-                                if(conn.actualizar("intervalos","estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + "), and intervalos.idFactura=CONVERT(int," + this.idFactura +"), and intervalos.intervaloFecha='" + fecha +"')") == true) 
-                                {
-                                    dataGridView1.DataSource = null;
-
-                                    cargarDatos();
-                                }
-
-
-                            }
-                            catch (SqlException se)
-                            {
-                                MessageBox.Show(se.ToString());
-                            }
-                        }
-                        else
-                        {
-                            
-                        }
-
-
-
+                        MessageBox.Show("Falta Dinero" + this.cantidad + " " + cuota);
+                        textBox1.Focus();
 
                     }
+                    else if (this.cantidad == cuota)
+                    {
+                        try
+                        {
+                            MessageBox.Show("cantidad " + cantidad + " cuotas " + cuota);
+                            if (conn.actualizar("intervalos", "estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fecha + "'") == true)
+                            {
+                                dataGridView1.DataSource = null;
+                                MessageBox.Show(Conexion.mensaje);
+                                cargarDatos();
+                            }
+                            MessageBox.Show(Conexion.mensaje);
+                           
+                        }
+                        catch (SqlException se)
+                        {
+                            MessageBox.Show(se.ToString());
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+
+                            if (conn.actualizar("intervalos", "estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fecha + "'") == true)
+                            {
+                                if(conn.actualizar("intervalos", "intervaloPago", "CONVERT(int," + (cuota - (this.cantidad - cuota)) + ")", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + Convert.ToDateTime(fecha).AddDays(this.periodoPago).ToString("yyyy-MM-dd") + "'") == true)
+                                {
+                                    MessageBox.Show(Conexion.mensaje);
+                                } else
+                                {
+                                    MessageBox.Show(Conexion.mensaje);
+                                }
+                                MessageBox.Show(Conexion.mensaje);
+                            }
+                            else
+                            {
+                                MessageBox.Show(Conexion.mensaje);
+                            }
+                                
+                            
+                                dataGridView1.DataSource = null;
+
+                                cargarDatos();
+                            
 
 
-                    
+                        }
+                        catch (SqlException se)
+                        {
+                            MessageBox.Show(se.ToString());
+                        }
+                    }
 
                 }
                 else
                 {
-                    textBox1.Text = "";
-                    pagar.Enabled = false;
+                    int _mora = Convert.ToInt32(((Convert.ToSingle(this.mora) / 100) * Convert.ToSingle(dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[1].Value.ToString())));
+                    int cuotaN = cuota + _mora;
+                    MessageBox.Show("Se le aplicara la mora + RD$"+_mora);
+
+                    conn.actualizar("intervalos", "intervaloPago", "CONVERT(int," + (cuota + _mora) + ")", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fechaAPagar.AddDays(this.periodoPago).ToString("yyyy-MM-dd") + "'");
+                    MessageBox.Show(Conexion.mensaje);
+                    dataGridView1.DataSource = null;
+
+                    cargarDatos();
+
+                    textBox1.Focus();
+
+                    if (this.cantidad < cuotaN)
+                    {
+                        MessageBox.Show("Falta Dinero");
+                        textBox1.Focus();
+
+                    }
+                    else if (this.cantidad == cuotaN)
+                    {
+                        try
+                        {
+
+                            if (conn.actualizar("intervalos", "estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + "), and intervalos.idFactura=CONVERT(int," + this.idFactura + "), and intervalos.intervaloFecha='" + fechaAPagar.ToString("yyyy-MM-dd") + "')") == true)
+                            {
+                                dataGridView1.DataSource = null;
+
+                                cargarDatos();
+                            }
+
+
+                        }
+                        catch (SqlException se)
+                        {
+                            MessageBox.Show(se.ToString());
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+
+                            if (conn.actualizar("intervalos", "estado", "'PAGADO'", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + fechaAPagar + "'") == true &&
+                                conn.actualizar("intervalos", "intervaloPago", "CONVERT(int," + (cuota - (this.cantidad - cuota)) + ")", "intervalos.idCliente=CONVERT(int," + this.idCliente + ") and intervalos.idFactura=CONVERT(int," + this.idFactura + ") and intervalos.intervaloFecha='" + Convert.ToDateTime(fecha).AddDays(this.periodoPago).ToString("yyyy-MM-dd") + "'") == true)
+                            {
+                                dataGridView1.DataSource = null;
+
+                                cargarDatos();
+                            }
+
+
+                        }
+                        catch (SqlException se)
+                        {
+                            MessageBox.Show(se.ToString());
+                        }
+                    }
+
                 }
             }
+            else
+            {
+                MessageBox.Show("Ya esta pago");
+            }
+                    
 
         }
 
